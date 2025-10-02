@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/figma/route": "/api/figma",
+  "/api/health/route": "/api/health",
+  "/favicon.ico/route": "/favicon.ico",
+  "/admin/page": "/admin",
+  "/blueprinter/page": "/blueprinter",
+  "/bot-templates/page": "/bot-templates",
+  "/page": "/"
+}
