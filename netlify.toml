@@ -1,0 +1,71 @@
+[build]
+  command = "npm install --legacy-peer-deps && npm run build"
+  functions = "netlify/functions"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
+  # Prevent build diagnostics issues
+  NEXT_TELEMETRY_DISABLED = "1"
+  # Optimize build
+  NODE_OPTIONS = "--max-old-space-size=4096"
+  # Fix permissions issues
+  NPM_CONFIG_FUND = "false"
+  NPM_CONFIG_AUDIT = "false"
+  # Ensure proper permissions
+  CI = "true"
+
+# Redirect all requests to Next.js
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/nextjs"
+  status = 200
+
+# API Routes as Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/nextjs"
+  status = 200
+
+# Health check endpoint
+[[redirects]]
+  from = "/api/health"
+  to = "/.netlify/functions/nextjs"
+  status = 200
+
+# Figma API endpoint
+[[redirects]]
+  from = "/api/figma"
+  to = "/.netlify/functions/nextjs"
+  status = 200
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Cache static assets
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Environment variables (set these in Netlify dashboard)
+# NEXT_PUBLIC_APP_NAME=TinkerBot Agency
+# NEXT_PUBLIC_APP_URL=https://your-site.netlify.app
+# POSTGRES_URL=your-database-url
+# STRIPE_SECRET_KEY=your-stripe-key
+# STRIPE_PUBLISHABLE_KEY=your-stripe-public-key
